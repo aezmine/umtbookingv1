@@ -74,9 +74,9 @@ public class DBConnection {
 //    private static final String JDBC_USERNAME = "root"; // change to your DB username
 //    private static final String JDBC_PASSWORD = "admin"; // change to your DB password
 //    
-    private static final String JDBC_URL = System.getenv("DB_URL"); // change to your DB
-    private static final String JDBC_USERNAME = System.getenv("DB_USER"); // change to your DB username
-    private static final String JDBC_PASSWORD = System.getenv("DB_PASS"); // change to your DB password
+    private static final String JDBC_URL = "jdbc:mysql://mysql.railway.internal:3306/db001"; // change to your DB
+    private static final String JDBC_USERNAME = "root"; // change to your DB username
+    private static final String JDBC_PASSWORD = "CPqjlqvaroxjRNQlJfENZCGLxLtABOOg"; // change to your DB password
 
     static {
         try {
