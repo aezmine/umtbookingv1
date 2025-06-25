@@ -40,7 +40,7 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-blue-100">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider rounded-tl-lg">ID</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider rounded-tl-lg">Booking ID</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">Classroom</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">Date</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-blue-800 uppercase tracking-wider">Time</th>
@@ -55,7 +55,7 @@
                             <c:forEach var="b" items="${bookingList}">
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${b.booking_id}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${b.classroom_id}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${b.classroom_name}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${b.booking_date}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${b.start_time} - ${b.end_time}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">

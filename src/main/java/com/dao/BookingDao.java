@@ -112,34 +112,73 @@ public class BookingDao {
 }
 
 
+//    public List<Booking> getBookingsByUserId(int userId) {
+//        List<Booking> list = new ArrayList<>();
+//        try {
+//            Connection con = DBConnection.getConnection();
+//            String sql = "SELECT * FROM bookings WHERE user_id = ?";
+//            PreparedStatement ps = con.prepareStatement(sql);
+//            ps.setInt(1, userId);
+//            ResultSet rs = ps.executeQuery();
+//
+//            while (rs.next()) {
+//                Booking b = new Booking();
+//                b.setBooking_id(rs.getInt("booking_id"));
+//                b.setUser_id(rs.getInt("user_id"));
+//                b.setClassroom_id(rs.getInt("classroom_id"));
+//                b.setBooking_date(rs.getDate("booking_date"));
+//                b.setStart_time(rs.getTime("start_time"));
+//                b.setEnd_time(rs.getTime("end_time"));
+//                b.setPurpose(rs.getString("purpose"));
+//                b.setStatus(rs.getString("status"));
+//                b.setCreated_at(rs.getString("created_at"));
+//                list.add(b);
+//            }
+//            con.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return list;
+//    }
     public List<Booking> getBookingsByUserId(int userId) {
-        List<Booking> list = new ArrayList<>();
-        try {
-            Connection con = DBConnection.getConnection();
-            String sql = "SELECT * FROM bookings WHERE user_id = ?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+    List<Booking> list = new ArrayList<>();
+    try {
+        Connection con = DBConnection.getConnection();
 
-            while (rs.next()) {
-                Booking b = new Booking();
-                b.setBooking_id(rs.getInt("booking_id"));
-                b.setUser_id(rs.getInt("user_id"));
-                b.setClassroom_id(rs.getInt("classroom_id"));
-                b.setBooking_date(rs.getDate("booking_date"));
-                b.setStart_time(rs.getTime("start_time"));
-                b.setEnd_time(rs.getTime("end_time"));
-                b.setPurpose(rs.getString("purpose"));
-                b.setStatus(rs.getString("status"));
-                b.setCreated_at(rs.getString("created_at"));
-                list.add(b);
-            }
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Join with classrooms table to get the classroom name
+        String sql = "SELECT b.*, c.name AS classroom_name FROM bookings b " +
+                     "JOIN classrooms c ON b.classroom_id = c.classroom_id " +
+                     "WHERE b.user_id = ?";
+                     
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, userId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            Booking b = new Booking();
+            b.setBooking_id(rs.getInt("booking_id"));
+            b.setUser_id(rs.getInt("user_id"));
+            b.setClassroom_id(rs.getInt("classroom_id"));
+            b.setBooking_date(rs.getDate("booking_date"));
+            b.setStart_time(rs.getTime("start_time"));
+            b.setEnd_time(rs.getTime("end_time"));
+            b.setPurpose(rs.getString("purpose"));
+            b.setStatus(rs.getString("status"));
+            b.setCreated_at(rs.getString("created_at"));
+
+            // ✅ Set the classroom name from joined result
+            b.setClassroom_name(rs.getString("classroom_name"));
+
+            list.add(b);
         }
-        return list;
+
+        con.close();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+    return list;
+}
+
 
     public void cancelBooking(int bookingId) {
         try {
