@@ -73,16 +73,19 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <c:if test="${b.status eq 'pending'}">
                                             <form action="BookingServlet" method="get" class="inline-block"
-                                                  onsubmit="showCustomConfirmationModal('Cancel Booking', 'Are you sure you want to cancel booking ID ${b.booking_id}?', this.action + '&booking_id=${b.booking_id}&user_id=${b.user_id}'); return false;">
-                                                <input type="hidden" name="action" value="cancel"/>
-                                                <input type="hidden" name="booking_id" value="${b.booking_id}"/>
-                                                <input type="hidden" name="user_id" value="${b.user_id}"/>
-                                                <button type="submit"
-                                                        class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors shadow-sm text-sm">
-                                                    <svg class="w-4 h-4 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                                                    Cancel
-                                                </button>
-                                            </form>
+      onsubmit="return confirm('Are you sure you want to cancel booking ID ${b.booking_id}?');">
+    <input type="hidden" name="action" value="cancel"/>
+    <input type="hidden" name="booking_id" value="${b.booking_id}"/>
+    <input type="hidden" name="user_id" value="${b.user_id}"/>
+    <button type="submit"
+            class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors shadow-sm text-sm">
+        <svg class="w-4 h-4 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+        Cancel
+    </button>
+</form>
+
                                         </c:if>
                                         <c:if test="${b.status eq 'approved'}">
                                             <span class="text-gray-500 text-sm">Cannot Cancel</span>
