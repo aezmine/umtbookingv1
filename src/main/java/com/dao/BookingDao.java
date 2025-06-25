@@ -12,6 +12,83 @@ import com.model.User;
 
 public class BookingDao {
     
+    public List<Classroom> getAllClassrooms() {
+    List<Classroom> list = new ArrayList<>();
+    try {
+        Connection con = DBConnection.getConnection();
+        String sql = "SELECT classroom_id, name FROM classrooms";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Classroom c = new Classroom();
+            c.setClassroom_id(rs.getInt("classroom_id"));
+            c.setName(rs.getString("name"));
+            list.add(c);
+        }
+        con.close();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return list;
+}
+
+    
+    public List<Classroom> getBookedClassrooms(String bookingDate, String startTime, String endTime) {
+    List<Classroom> booked = new ArrayList<>();
+    try (Connection conn = DBConnection.getConnection()) {
+        String sql = "SELECT DISTINCT c.classroom_id, c.name " +
+                     "FROM classrooms c " +
+                     "JOIN bookings b ON c.classroom_id = b.classroom_id " +
+                     "WHERE b.booking_date = ? AND (b.start_time < ? AND b.end_time > ?)";
+
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, bookingDate);
+        stmt.setString(2, endTime);   // booking’s end time
+        stmt.setString(3, startTime); // booking’s start time
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Classroom c = new Classroom();
+            c.setClassroom_id(rs.getInt("classroom_id"));
+            c.setName(rs.getString("name"));
+            booked.add(c);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return booked;
+}
+
+    
+    
+    // tk guna
+        public List<Classroom> getAvailableClassrooms(String bookingDate, String startTime, String endTime) {
+    List<Classroom> available = new ArrayList<>();
+    try (Connection conn = DBConnection.getConnection()) {
+        String sql = "SELECT * FROM classrooms WHERE classroom_id NOT IN (" +
+                     "SELECT classroom_id FROM bookings WHERE booking_date = ? AND " +
+                     "(start_time < ? AND end_time > ?))";
+
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setString(1, bookingDate);
+        stmt.setString(2, endTime);   // end time in the form
+        stmt.setString(3, startTime); // start time in the form
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Classroom c = new Classroom();
+            c.setClassroom_id(rs.getInt("classroom_id"));
+            c.setName(rs.getString("name"));
+            // Set other classroom details if needed
+            available.add(c);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return available;
+}
+
+    
     public boolean isBookingConflict(int classroom_id, Date booking_date, Time start_time, Time end_time) {
     boolean conflict = false;
     try {

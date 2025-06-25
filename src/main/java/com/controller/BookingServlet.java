@@ -206,6 +206,21 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
 
         bookingDao.updateBooking(b);
         response.sendRedirect("BookingServlet?action=listAll");
-    }
+    }else if ("filterClassrooms".equals(action)) {
+    String bookingDate = request.getParameter("booking_date");
+    String startTime = request.getParameter("start_time");
+    String endTime = request.getParameter("end_time");
+
+    // Call DAO to get available classrooms
+    List<Classroom> availableRooms = bookingDao.getAvailableClassrooms(bookingDate, startTime, endTime);
+
+    // Set attributes and forward back to booking page
+    request.setAttribute("classrooms", availableRooms);
+    request.setAttribute("booking_date", bookingDate);
+    request.setAttribute("start_time", startTime);
+    request.setAttribute("end_time", endTime);
+    request.getRequestDispatcher("BookingForm.jsp").forward(request, response);
+}
+
 }
 }
